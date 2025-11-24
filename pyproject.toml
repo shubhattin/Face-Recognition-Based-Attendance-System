@@ -1,0 +1,14 @@
+[project]
+name = "face-recognition-based-attendance-system"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dlib>=20.0.0",
+    "flask>=3.1.2",
+    "numpy>=2.3.5",
+    "opencv-python>=4.11.0.86",
+    "pandas>=2.3.3",
+    "scikit-image>=0.25.2",
+]
