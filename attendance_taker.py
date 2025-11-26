@@ -268,7 +268,13 @@ class Face_Recognizer:
             while stream.isOpened():
                 self.frame_cnt += 1
                 logging.debug("Frame " + str(self.frame_cnt) + " starts")
-                flag, img_rd = stream.read()
+                ret, img_rd = stream.read()
+
+                # Check if frame was read successfully
+                if not ret or img_rd is None:
+                    logging.warning("Failed to read frame from camera")
+                    break
+
                 kk = cv2.waitKey(1)
 
                 # 2.  Detect faces for frame X
@@ -489,8 +495,8 @@ class Face_Recognizer:
 
     def run(self):
         # cap = cv2.VideoCapture("video.mp4")  # Get video stream from video file
-        # On macOS, prefer AVFoundation backend for reliable camera access
-        cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)  # Get video stream from camera
+        # Get video stream from camera (use default backend for cross-platform compatibility)
+        cap = cv2.VideoCapture(0)
         # Hint camera for performance-friendly resolution and fps
         try:
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -498,6 +504,11 @@ class Face_Recognizer:
             cap.set(cv2.CAP_PROP_FPS, 30)
         except Exception:
             pass
+
+        if not cap.isOpened():
+            logging.error("Error: Cannot open camera!")
+            return
+
         self.process(cap)
 
         cap.release()
